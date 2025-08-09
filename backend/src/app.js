@@ -1,15 +1,21 @@
-import express from "express";
-import cors from "cors";
+import express from "express"
+import cors from "cors"
+import "./cron.js";
 
-const app = express();
 
-// Middlewares
-app.use(cors());
-app.use(express.json());
+const app = express()
 
-// Test route
-app.get("/", (req, res) => {
-    res.json({ message: "Backend is running 🚀" });
-});
+app.use(cors(
+  {  orign: process.env.CORS_ORIGIN || "https://send-files-xi.vercel.app"}
+))
+app.use("/temp", express.static("public/temp"));
 
-export { app };
+app.use(express.urlencoded({extended: true}))
+app.use(express.json())
+
+export {app}
+
+
+import router from "./routes/file.routes.js";
+
+app.use("/api/v1/file",router)
